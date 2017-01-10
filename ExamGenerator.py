@@ -1,4 +1,4 @@
-import random, pyqrcode, copy, simplecrypt
+import random, pyqrcode, copy, simplecrypt, os
 from fpdf import FPDF
 from binascii import hexlify
 
@@ -63,7 +63,19 @@ class generateExam(object):
                              )
             pdf.output('exam'+str(i)+'.pdf','F')            
             
+    def cleanup(self):
+        for i in range(self.numVersions):
+            try:
+                os.remove('qrcode'+str(i)+'.png')
+            except:
+                pass
             
+    def run(self):
+        self.inputQAndA()
+        self.generateQR()
+        self.generatePDF()
+        self.cleanup()
+        
             
             
             
@@ -71,7 +83,5 @@ class generateExam(object):
 numQuestions = int(raw_input('How many questions is this exam?'))
 numVersions = int(raw_input('How many versions would you like?'))
 
-instance = generateExam(numQuestions, numVersions)
-instance.inputQAndA()
-instance.generateQR()
-instance.generatePDF()
+newExam = generateExam(numQuestions, numVersions)
+newExam.run()
