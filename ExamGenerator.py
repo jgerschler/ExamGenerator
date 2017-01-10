@@ -1,4 +1,6 @@
-import random, pyqrcode, copy, simplecrypt, os
+#!/usr/bin/env python
+
+import random, pyqrcode, copy, simplecrypt, os, argparse
 from fpdf import FPDF
 from binascii import hexlify
 
@@ -75,13 +77,16 @@ class generateExam(object):
         self.generateQR()
         self.generatePDF()
         self.cleanup()
-        
-            
-            
-            
-            
-numQuestions = int(raw_input('How many questions is this exam?'))
-numVersions = int(raw_input('How many versions would you like?'))
 
-newExam = generateExam(numQuestions, numVersions)
-newExam.run()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="ExamGenerator.py v1.0 Generate randomized multiple choice exams for grading with camera. (c) j.j. gerschler")
+    parser.add_argument("-q", "--questions", help="Number of questions per exam.")
+    parser.add_argument("-v", "--versions", help="Number of versions of exam.")
+
+    args = parser.parse_args()
+
+    newExam = generateExam(int(args.questions), int(args.versions))
+    newExam.run()
+
+    print ""
+    print "Done."
