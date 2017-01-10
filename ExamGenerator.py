@@ -24,7 +24,7 @@ class generateExam(object):
             self.questionList.append([question,self.answerList])
             self.answerList = []
             
-    def generateQR(self):
+    def buildExam(self):
         for i in range(self.numVersions):
             self.newQuestionList = copy.deepcopy(self.questionList)
             for m in range(len(self.newQuestionList)):
@@ -41,10 +41,7 @@ class generateExam(object):
                         
             cipherText = hexlify(simplecrypt.encrypt('ChangeThisKey!',plainTextAnswerString))# encrypt answer string and convert binary to hex before making qr code
             qr_code = pyqrcode.create(cipherText, error='M', version=14, mode='binary')# generate QR code
-            qr_code.png('qrcode'+str(i)+'.png', scale=2, module_color=[0, 0, 0, 0], background=[0xff, 0xff, 0xff])# save as PNG
-            
-    def generatePDF(self):
-        for i in range(self.numVersions):    
+            qr_code.png('qrcode'+str(i)+'.png', scale=2, module_color=[0, 0, 0, 0], background=[0xff, 0xff, 0xff])# save as PNG  
             pdf=FPDF()
             pdf.alias_nb_pages()
             pdf.add_page()
@@ -74,8 +71,7 @@ class generateExam(object):
             
     def run(self):
         self.inputQAndA()
-        self.generateQR()
-        self.generatePDF()
+        self.buildExam()
         self.cleanup()
 
 if __name__ == "__main__":
@@ -88,5 +84,5 @@ if __name__ == "__main__":
     newExam = generateExam(int(args.questions), int(args.versions))
     newExam.run()
 
-    print ""
-    print "Done."
+    print("")
+    print("Done.")
