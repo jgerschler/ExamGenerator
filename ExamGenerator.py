@@ -10,7 +10,6 @@ class generateExam(object):
         self.numVersions = numVersions
         self.questionList = []
         self.questionDict = {0:'a',1:'b',2:'c',3:'d'}
-        #self.answerList = []# remove if not needed
 
     def input_q_and_a(self):
         for i in range(self.numQuestions):
