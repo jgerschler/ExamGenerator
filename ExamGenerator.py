@@ -12,7 +12,7 @@ class generateExam(object):
         self.questionDict = {0:'a',1:'b',2:'c',3:'d'}
         #self.answerList = []# remove if not needed
 
-    def inputQAndA(self):
+    def input_q_and_a(self):
         for i in range(self.numQuestions):
             question = raw_input('Please type question ' + str(i+1) + '.')
             answer = raw_input('Please type the answer.')
@@ -24,7 +24,7 @@ class generateExam(object):
             self.questionList.append([question,self.answerList])
             self.answerList = []
             
-    def buildExam(self):
+    def build_exam(self):
         for i in range(self.numVersions):
             self.newQuestionList = copy.deepcopy(self.questionList)
             for m in range(len(self.newQuestionList)):
@@ -70,8 +70,8 @@ class generateExam(object):
                 pass
             
     def run(self):
-        self.inputQAndA()
-        self.buildExam()
+        self.input_q_and_a()
+        self.build_exam()
         self.cleanup()
 
 if __name__ == "__main__":
@@ -81,8 +81,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    newExam = generateExam(int(args.questions), int(args.versions))
-    newExam.run()
+    NewExam = generateExam(int(args.questions), int(args.versions))
+    NewExam.run()
 
     print("")
     print("Done.")
