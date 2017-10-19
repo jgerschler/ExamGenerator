@@ -32,18 +32,16 @@ def Lookup(idxvalue):
     mclist = mcidx.split('x')
     return mclist
 
-def ZBarReader(dirpath):
-    #used zbarcam.exe to read QR code and pull answer string
+def zbar_reader(self):
     print("Expose barcode to camera")
-    rawcode = ''
-    while rawcode == '':
-        rawcode = subprocess.check_output(dirpath,shell=True)
-    rawcode = rawcode.split()
-    rawcode = rawcode[0][8:]
-    rawcode = decrypt('RSbv2HZbON6rseN!',unhexlify(rawcode))
-    return rawcode
+    raw_code = ''
+    while raw_code == '':
+        raw_code = subprocess.check_output(dirpath,shell=True)
+    raw_code = raw_code.split()[0][8:]
+    # insert decryption routine here
+    return raw_code
 
-def GradeExam(complist, answerlist):
+def grade_exam(self, complist, answerlist):
     #no need to check for duplicates currently due to class policy
     #prep the reponse list
     complist = sorted(complist, key=lambda answer: answer[0])
@@ -63,86 +61,84 @@ def GradeExam(complist, answerlist):
                 pass
     return correctresponses, examquestions, incorrectanswers
 
-#initialize camera and save image once all circles are grabbed
+def run(self):
+    cap = cv2.VideoCapture(0)
 
-cap = cv2.VideoCapture(0)
-
-while(True):
-    retval, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    #delay here if display is saturated and no circles found.
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 25, np.array([]), 10, 25, 8, 14)
-    a, b, c = circles.shape
-    for i in range(b):
-        cv2.circle(frame, (circles[0][i][0], circles[0][i][1]), circles[0][i][2], (0, 0, 255), 1, cv2.LINE_AA)
-    cv2.imshow("Grade Cam", frame)
-    if b == 120:
-        print("Exam complete.")
-        centercoords = []
+    while(True):
+        retval, frame = cap.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        #delay here if display is saturated and no circles found.
+        circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 25, np.array([]), 10, 25, 8, 14)
+        a, b, c = circles.shape
         for i in range(b):
-            centercoords.append((circles[0][i][0], circles[0][i][1]))
-        #We've gotten the circle coords, now save the image!
-        cv2.imwrite("image.png",gray)
-        cap.release()
-        cv2.destroyAllWindows()
-        print("Image saved!")
-        #the circle center coordinates are sorted by x,y value from smallest to largest
-        sortedcoords = sorted(centercoords,key=lambda coord: (coord[0],coord[1]))
-        splitcoords = []
-        #the sorted coordinate list is separated into columns, which are sorted
-        #by the y-values from smallest to largest.
-        for i in range(len(sortedcoords)/10):
-            segcoords = sorted(sortedcoords[10*i:10*i+10],key=lambda coord: coord[1])
-            splitcoords.extend(segcoords)
-        #since the x-values can vary depending on the orientation of the grading sheet,
-        #we will use the y-values to determine which circle we are looking at.
+            cv2.circle(frame, (circles[0][i][0], circles[0][i][1]), circles[0][i][2], (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.imshow("Grade Cam", frame)
+        if b == 120:
+            print("Exam complete.")
+            centercoords = []
+            for i in range(b):
+                centercoords.append((circles[0][i][0], circles[0][i][1]))
+            cv2.imwrite("image.png",gray)
+            cap.release()
+            cv2.destroyAllWindows()
+            print("Image saved!")
+            #the circle center coordinates are sorted by x,y value from smallest to largest
+            sortedcoords = sorted(centercoords,key=lambda coord: (coord[0],coord[1]))
+            splitcoords = []
+            #the sorted coordinate list is separated into columns, which are sorted
+            #by the y-values from smallest to largest.
+            for i in range(len(sortedcoords)/10):
+                segcoords = sorted(sortedcoords[10*i:10*i+10],key=lambda coord: coord[1])
+                splitcoords.extend(segcoords)
+            #since the x-values can vary depending on the orientation of the grading sheet,
+            #we will use the y-values to determine which circle we are looking at.
 
-        #loading the image for pixel analysis
-        im = Image.open("image.png")
-        pix = im.load()
-        complist = []
+            #loading the image for pixel analysis
+            im = Image.open("image.png")
+            pix = im.load()
+            complist = []
 
-        for i in range(len(splitcoords)):
-            gindex = 0
-            #compute simple average of white zones, and subtract constant to calculate threshold
-            graythreshold = (pix[10,240]+pix[630,240]+pix[320,10]+pix[320,470])/4 - 30
-            #look in range of +/- 3 pixels in x and y directions
-            for j in range(int(splitcoords[i][0])-3,int(splitcoords[i][0])+3):
-                for k in range(int(splitcoords[i][1])-3,int(splitcoords[i][1])+3):
-                    try:
-                        #if pixel is darker than certain amount, increase the gray index and count it.
-                        if pix[j,k] < graythreshold:
-                            gindex += 1
-                    except:
-                        if j >= 640: j = 639
-                        elif j <= 0: j = 1
-                        elif k >= 480: k = 479
-                        elif k <= 0: k = 1
-                        if pix[j,k] < graythreshold:
-                            gindex += 1
-            if gindex > 18:
-                #if there are enough dark pixels in the circle, count it as filled.
-                #print("This circle is filled: ")
-                mclist = Lookup(i)
-                complist.append(mclist)
+            for i in range(len(splitcoords)):
+                gindex = 0
+                #compute simple average of white zones, and subtract constant to calculate threshold
+                graythreshold = (pix[10,240]+pix[630,240]+pix[320,10]+pix[320,470])/4 - 30
+                #look in range of +/- 3 pixels in x and y directions
+                for j in range(int(splitcoords[i][0])-3,int(splitcoords[i][0])+3):
+                    for k in range(int(splitcoords[i][1])-3,int(splitcoords[i][1])+3):
+                        try:
+                            #if pixel is darker than certain amount, increase the gray index and count it.
+                            if pix[j,k] < graythreshold:
+                                gindex += 1
+                        except:
+                            if j >= 640: j = 639
+                            elif j <= 0: j = 1
+                            elif k >= 480: k = 479
+                            elif k <= 0: k = 1
+                            if pix[j,k] < graythreshold:
+                                gindex += 1
+                if gindex > 18:
+                    #if there are enough dark pixels in the circle, count it as filled.
+                    #print("This circle is filled: ")
+                    mclist = Lookup(i)
+                    complist.append(mclist)
+                
+            #print(complist)
+
+            print("Scan the QR code now.")
+            rawcode = ZBarReader(dirpath)
+            answerlist = rawcode.split('x')[:-1]
+            #print(answerlist)
+
+            correctresponses, examquestions, incorrectanswers = GradeExam(complist, answerlist)
+
+            print(str(correctresponses) + " out of " + str(examquestions) + " correct.")
+            print('Score: ' + str(10*round(correctresponses,2)/round(examquestions,2)))
+            print('Answers for incorrect responses are shown below:')
+            print(incorrectanswers)
             
-        #print(complist)
-
-        print("Scan the QR code now.")
-        rawcode = ZBarReader(dirpath)
-        answerlist = rawcode.split('x')[:-1]
-        #print(answerlist)
-
-        correctresponses, examquestions, incorrectanswers = GradeExam(complist, answerlist)
-
-        print(str(correctresponses) + " out of " + str(examquestions) + " correct.")
-        print('Score: ' + str(10*round(correctresponses,2)/round(examquestions,2)))
-        print('Answers for incorrect responses are shown below:')
-        print(incorrectanswers)
-        
-        break
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+            break
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
 
 
