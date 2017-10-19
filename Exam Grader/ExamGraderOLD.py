@@ -91,7 +91,7 @@ while(True):
         splitcoords = []
         #the sorted coordinate list is separated into columns, which are sorted
         #by the y-values from smallest to largest.
-        for i in range(len(sortedcoords)/10):
+        for i in range(12):
             segcoords = sorted(sortedcoords[10*i:10*i+10],key=lambda coord: coord[1])
             splitcoords.extend(segcoords)
         #since the x-values can vary depending on the orientation of the grading sheet,
@@ -130,8 +130,7 @@ while(True):
 
         print("Scan the QR code now.")
         rawcode = ZBarReader(dirpath)
-        answerlist = rawcode.split('x')[:-1]
-        #print(answerlist)
+        answerlist = rawcode.decode('utf-8').split('x')[:-1]
 
         correctresponses, examquestions, incorrectanswers = GradeExam(complist, answerlist)
 

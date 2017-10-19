@@ -74,7 +74,6 @@ def run(self):
             cv2.circle(frame, (circles[0][i][0], circles[0][i][1]), circles[0][i][2], (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imshow("Grade Cam", frame)
         if b == 120:
-            print("Exam complete.")
             centercoords = []
             for i in range(b):
                 centercoords.append((circles[0][i][0], circles[0][i][1]))
