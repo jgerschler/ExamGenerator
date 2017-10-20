@@ -1,5 +1,6 @@
+import cv2
 import numpy as np
-import cv2, string, subprocess
+import subprocess
 from PIL import Image
 from binascii import unhexlify
 from simplecrypt import decrypt
@@ -38,20 +39,19 @@ def zbar_reader(self):
     while raw_code == '':
         raw_code = subprocess.check_output(dirpath,shell=True)
     raw_code = raw_code.split()[0][8:]
-    # insert decryption routine here
-    return raw_code
+    return decrypt('RSbv2HZbON6rseN!', unhexlify(raw_code))
 
-def grade_exam(self, complist, answerlist):
+def grade_exam(self, comp_list, answerlist):
     #no need to check for duplicates currently due to class policy
     #prep the reponse list
-    complist = sorted(complist, key=lambda answer: answer[0])
-    for i in range(len(complist)):
-        complist[i] = complist[i][0]+complist[i][1]
+    comp_list = sorted(comp_list, key=lambda answer: answer[0])
+    for i in range(len(comp_list)):
+        comp_list[i] = comp_list[i][0]+comp_list[i][1]
     #how many questions on the exam?
     examquestions = len(answerlist)
     correctresponses = 0
     incorrectanswers = []
-    for response in complist:
+    for response in comp_list:
         if response in answerlist:
             correctresponses+=1
         else:
@@ -67,35 +67,28 @@ def run(self):
     while(True):
         retval, frame = cap.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        #delay here if display is saturated and no circles found.
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 25, np.array([]), 10, 25, 8, 14)
         a, b, c = circles.shape
         for i in range(b):
             cv2.circle(frame, (circles[0][i][0], circles[0][i][1]), circles[0][i][2], (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imshow("Grade Cam", frame)
         if b == 120:
-            centercoords = []
+            center_coords = []
             for i in range(b):
-                centercoords.append((circles[0][i][0], circles[0][i][1]))
+                center_coords.append((circles[0][i][0], circles[0][i][1]))
             cv2.imwrite("image.png",gray)
             cap.release()
             cv2.destroyAllWindows()
             print("Image saved!")
-            #the circle center coordinates are sorted by x,y value from smallest to largest
-            sortedcoords = sorted(centercoords,key=lambda coord: (coord[0],coord[1]))
-            splitcoords = []
-            #the sorted coordinate list is separated into columns, which are sorted
-            #by the y-values from smallest to largest.
-            for i in range(len(sortedcoords)/10):
-                segcoords = sorted(sortedcoords[10*i:10*i+10],key=lambda coord: coord[1])
-                splitcoords.extend(segcoords)
-            #since the x-values can vary depending on the orientation of the grading sheet,
-            #we will use the y-values to determine which circle we are looking at.
 
-            #loading the image for pixel analysis
+            sorted_coords = sorted(center_coords,key=lambda coord: (coord[0],coord[1]))# sorting circle centers from smallest to largest
+            split_coords = []
+            for i in range(12):
+                split_coords += sorted(sorted_coords[10*i:10*i+10],key=lambda coord: coord[1])# separating by y-value from smallest to largest
+
             im = Image.open("image.png")
             pix = im.load()
-            complist = []
+            comp_list = []
 
             for i in range(len(splitcoords)):
                 gindex = 0
@@ -119,16 +112,16 @@ def run(self):
                     #if there are enough dark pixels in the circle, count it as filled.
                     #print("This circle is filled: ")
                     mclist = Lookup(i)
-                    complist.append(mclist)
+                    comp_list.append(mclist)
                 
-            #print(complist)
+            #print(comp_list)
 
             print("Scan the QR code now.")
             rawcode = ZBarReader(dirpath)
             answerlist = rawcode.split('x')[:-1]
             #print(answerlist)
 
-            correctresponses, examquestions, incorrectanswers = GradeExam(complist, answerlist)
+            correctresponses, examquestions, incorrectanswers = GradeExam(comp_list, answerlist)
 
             print(str(correctresponses) + " out of " + str(examquestions) + " correct.")
             print('Score: ' + str(10*round(correctresponses,2)/round(examquestions,2)))
