@@ -8,9 +8,9 @@ from time import sleep
 
 dirpath = "C:\\ZBar\\bin\\zbarcam.exe"
 
-def Lookup(idxvalue):
+def lookup(idxvalue):
     #left this going to 40 in case we want to expand in the future
-    LookupList = ['1xa', '2xa', '3xa', '4xa', '5xa', '6xa', '7xa', '8xa', '9xa', '10xa', \
+    lookup_list = ['1xa', '2xa', '3xa', '4xa', '5xa', '6xa', '7xa', '8xa', '9xa', '10xa', \
               '1xb', '2xb', '3xb', '4xb', '5xb', '6xb', '7xb', '8xb', '9xb', '10xb', \
               '1xc', '2xc', '3xc', '4xc', '5xc', '6xc', '7xc', '8xc', '9xc', '10xc', \
               '1xd', '2xd', '3xd', '4xd', '5xd', '6xd', '7xd', '8xd', '9xd', '10xd', \
@@ -29,7 +29,7 @@ def Lookup(idxvalue):
               '39xc', '40xc', '31xd', '32xd', '33xd', '34xd', '35xd', '36xd', '37xd', \
               '38xd', '39xd', '40xd']
     
-    mcidx = LookupList[idxvalue]
+    mcidx = lookup_list[idxvalue]
     mclist = mcidx.split('x')
     return mclist
 
@@ -107,17 +107,15 @@ def run(self):
                             elif k <= 0: k = 1
                             if pix[j, k] < gray_threshold:
                                 gindex += 1
-                if gindex > 18:
-                    #if there are enough dark pixels in the circle, count it as filled.
-                    #print("This circle is filled: ")
-                    mclist = Lookup(i)
-                    comp_list.append(mclist)
+                if gindex > 18:# count dark enough circles as filled.
+                    mclist = lookup(i)
+                    comp_list.append(lookup(i))
                 
             print("Scan the QR code now.")
-            rawcode = ZBarReader(dirpath)
-            answerlist = rawcode.split('x')[:-1]
+            raw_code = zbar_reader(dirpath)
+            answer_list = raw_code.split('x')[:-1]
 
-            correctresponses, examquestions, incorrectanswers = GradeExam(comp_list, answerlist)
+            correctresponses, examquestions, incorrectanswers = grade_exam(comp_list, answer_list)
 
             print(str(correctresponses) + " out of " + str(examquestions) + " correct.")
             print('Score: ' + str(10*round(correctresponses,2)/round(examquestions,2)))
