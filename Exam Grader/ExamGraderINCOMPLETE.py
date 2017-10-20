@@ -90,23 +90,22 @@ def run(self):
             pix = im.load()
             comp_list = []
 
-            for i in range(len(splitcoords)):
+            for i in range(120):
                 gindex = 0
                 #compute simple average of white zones, and subtract constant to calculate threshold
-                graythreshold = (pix[10,240]+pix[630,240]+pix[320,10]+pix[320,470])/4 - 30
+                gray_threshold = (pix[10, 240] + pix[630, 240] + pix[320, 10] + pix[320, 470]) / 4 - 30
                 #look in range of +/- 3 pixels in x and y directions
-                for j in range(int(splitcoords[i][0])-3,int(splitcoords[i][0])+3):
-                    for k in range(int(splitcoords[i][1])-3,int(splitcoords[i][1])+3):
+                for j in range(int(split_coords[i][0]) - 3, int(split_coords[i][0]) + 3):
+                    for k in range(int(split_coords[i][1]) - 3, int(split_coords[i][1]) + 3):
                         try:
-                            #if pixel is darker than certain amount, increase the gray index and count it.
-                            if pix[j,k] < graythreshold:
+                            if pix[j, k] < gray_threshold:
                                 gindex += 1
                         except:
                             if j >= 640: j = 639
                             elif j <= 0: j = 1
                             elif k >= 480: k = 479
                             elif k <= 0: k = 1
-                            if pix[j,k] < graythreshold:
+                            if pix[j, k] < gray_threshold:
                                 gindex += 1
                 if gindex > 18:
                     #if there are enough dark pixels in the circle, count it as filled.
@@ -114,12 +113,9 @@ def run(self):
                     mclist = Lookup(i)
                     comp_list.append(mclist)
                 
-            #print(comp_list)
-
             print("Scan the QR code now.")
             rawcode = ZBarReader(dirpath)
             answerlist = rawcode.split('x')[:-1]
-            #print(answerlist)
 
             correctresponses, examquestions, incorrectanswers = GradeExam(comp_list, answerlist)
 
