@@ -50,19 +50,18 @@ class GenerateExam(object):
             pdf.alias_nb_pages()
             pdf.add_page()
             pdf.set_font('Arial','B',12)
-            pdf.cell(190, 10, ' Name:______________________________                              Group:_____________', 1, 1, 'L')
+            pdf.cell(190, 10, ' Name:______________________________                                     Group:_____________', 1, 1, 'L')
             pdf.ln(75)
-            pdf.image('qrcode{0}.png'.format(i), 7, 24, 50)
-            pdf.image('gradebox.png', 180, 24, 15)
-            pdf.image('grid.png', 60, 22, 110)
+            pdf.image('qrcode{0}.png'.format(i), 24, 24, 50)
+            pdf.image('grid.png', 77, 22, 110)
             pdf.set_font('Times', '', 8)
             for j in range(len(self.new_question_list)):
-                    pdf.multi_cell(0, 5, str(j + 1) + '. ' + self.new_question_list[j][0], 0, 1)
-                    pdf.multi_cell(0, 7, 'A. ' + self.new_question_list[j][1][0] + '          '\
-                             'B. ' + self.new_question_list[j][1][1] + '          '\
-                             'C. ' + self.new_question_list[j][1][2] + '          '\
-                             'D. ' + self.new_question_list[j][1][3] + '          ', 0, 1
-                             )
+                    pdf.multi_cell(0, 5, str(j + 1) + '. ' +
+                                   self.new_question_list[j][0], 0, 1)
+                    pdf.multi_cell(0, 7, 'A. {0}         B. {1}         C. {2}         D. {3}'.format(self.new_question_list[j][1][0],
+                                                                                                      self.new_question_list[j][1][1],
+                                                                                                      self.new_question_list[j][1][2],
+                                                                                                      self.new_question_list[j][1][3], 0, 1))
             pdf.output('exam{0}.pdf'.format(i), 'F')            
             
     def cleanup(self):
@@ -70,12 +69,14 @@ class GenerateExam(object):
             try:
                 os.remove('qrcode{0}.png'.format(i))
             except:
-                pass
+                print("Can't remove png files.")
             
     def run(self):
         self.input_q_and_a()
         self.build_exam()
         self.cleanup()
+
+# uncomment below to enable command line interface                                   
 
 ##if __name__ == "__main__":
 ##    parser = argparse.ArgumentParser(description="ExamGenerator.py v1.0 Generate randomized multiple choice exams for grading with camera. (c) j.j. gerschler")
@@ -90,5 +91,5 @@ class GenerateExam(object):
 ##    print("")
 ##    print("Done.")
 
-new_exam = GenerateExam(3, 1)
+new_exam = GenerateExam(3, 1)# number of questions, number of versions
 new_exam.run()
