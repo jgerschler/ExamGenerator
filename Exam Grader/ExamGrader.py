@@ -65,7 +65,7 @@ class Grader(object):
         while(True):
             retval, frame = cap.read()
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 25, np.array([]), 10, 25, 8, 14)
+            circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1, 25, np.array([]), 10, 25, 8, 16)
             a, b, c = circles.shape
 
             for i in range(b):
@@ -118,6 +118,7 @@ class Grader(object):
                 print("{0} out of {1} correct.".format(correct, questions))
                 print("Score: {0}".format(10 * round(correct, 2) / round(questions, 2)))
                 print('Answers for incorrect responses are shown below:')
+                incorrect.sort(key=lambda x: int(x[:-1]))
                 print(incorrect)
                 
                 break
