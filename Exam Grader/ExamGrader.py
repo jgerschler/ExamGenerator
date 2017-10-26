@@ -43,7 +43,7 @@ class Grader(object):
         while raw_code == '':
             raw_code = subprocess.check_output(dirpath,shell=True)
         raw_code = raw_code.split()[0][8:]
-        return decrypt('RSbv2HZbON6rseN!', unhexlify(raw_code))# change example passphrase
+        return decrypt('ChangeThisKey!', unhexlify(raw_code))# change example passphrase
 
     def grade_exam(self, comp_list, answer_list):# no duplicate checking
         comp_list = sorted(comp_list, key=lambda answer: answer[0])

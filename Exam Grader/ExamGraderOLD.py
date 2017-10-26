@@ -40,7 +40,7 @@ def ZBarReader(dirpath):
         rawcode = subprocess.check_output(dirpath,shell=True)
     rawcode = rawcode.split()
     rawcode = rawcode[0][8:]
-    rawcode = decrypt('RSbv2HZbON6rseN!',unhexlify(rawcode))
+    rawcode = decrypt('ChangeThisKey!',unhexlify(rawcode))
     return rawcode
 
 def GradeExam(complist, answerlist):

@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
-import random, pyqrcode, copy, simplecrypt, os, argparse
+import random
+import pyqrcode
+import copy
+import simplecrypt
+import os
+import argparse
 from fpdf import FPDF
 from binascii import hexlify
 
@@ -13,14 +18,14 @@ class GenerateExam(object):
 
     def input_q_and_a(self):
         for i in range(self.num_questions):
-            question = raw_input('Please type question ' + str(i+1) + '.')
+            question = raw_input('Please type question {0}.'.format(i + 1))
             answer = raw_input('Please type the answer.')
             filler_0 = raw_input('Please type filler one.')
             filler_1 = raw_input('Please type filler two.')
             filler_2 = raw_input('Please type filler three.')
             
-            self.answer_list = ['&3#'+answer, filler_0, filler_1, filler_2]# obviously exam answers cannot contain string &3# -- this needs to be updated!
-            self.question_list.append([question,self.answer_list])
+            self.answer_list = ['&3#' + answer, filler_0, filler_1, filler_2]# obviously exam answers cannot contain string &3# -- this needs to be updated!
+            self.question_list.append([question, self.answer_list])
             self.answer_list = []
             
     def build_exam(self):
