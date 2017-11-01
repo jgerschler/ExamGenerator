@@ -1,42 +1,10 @@
 import cv2
 import imutils
 
-class ShapeDetector:
-    def __init__(self):
-        pass
- 
-    def detect(self, c):
-        # initialize the shape name and approximate the contour
-        shape = "unidentified"
-        perimeter = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.1 * perimeter, True)
-
-        # if the shape is a triangle, it will have 3 vertices
-        if len(approx) == 3:
-            shape = "triangle"
-
-        # if the shape has 4 vertices, it is either a square or
-        # a rectangle
-        elif len(approx) == 4:
-            # compute the bounding box of the contour and use the
-            # bounding box to compute the aspect ratio
-            (x, y, w, h) = cv2.boundingRect(approx)
-            ar = w / float(h)
-
-            # a square will have an aspect ratio that is approximately
-            # equal to one, otherwise, the shape is a rectangle
-            shape = "square" if ar >= 0.95 and ar <= 1.05 else "rectangle"
-
-        # if the shape is a pentagon, it will have 5 vertices
-        elif len(approx) == 5:
-            shape = "pentagon"
-
-        # otherwise, we assume the shape is a circle
-        else:
-            shape = "circle"
-
-        # return the name of the shape
-        return shape
+def is_valid_triangle(c):
+    perimeter = cv2.arcLength(c, True)
+    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True)
+    return True if len(approx) == 3 else False  
 
 # load the image and resize it to a smaller factor so that
 # the shapes can be approximated better
@@ -54,8 +22,7 @@ thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
 # shape detector
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
-cnts = cnts[0] if imutils.is_cv2() else cnts[1]
-sd = ShapeDetector()
+cnts = cnts[1]
 
 # loop over the contours
 for c in cnts:
@@ -64,7 +31,7 @@ for c in cnts:
     M = cv2.moments(c)
     cX = int((M["m10"] / M["m00"]) * ratio)
     cY = int((M["m01"] / M["m00"]) * ratio)
-    shape = sd.detect(c)
+    shape = is_valid_triangle(c)
 
     # multiply the contour (x, y)-coordinates by the resize ratio,
     # then draw the contours and the name of the shape on the image
@@ -72,9 +39,7 @@ for c in cnts:
     c *= ratio
     c = c.astype("int")
     cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
-    cv2.putText(image, shape, (cX, cY), cv2.FONT_HERSHEY_SIMPLEX,
-            0.5, (255, 255, 255), 2)
+    cv2.circle(image, (cX, cY), 7, (255, 255, 255), -1)
 
-# show the output image
 cv2.imshow("Image", image)
 cv2.waitKey(0)
