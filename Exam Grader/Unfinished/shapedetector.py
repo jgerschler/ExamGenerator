@@ -15,17 +15,20 @@ thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)[1]
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[1]
+triangles = []
+i = 0
 
-# loop over the contours
 for c in cnts:
     # compute the center of the contour
-    M = cv2.moments(c)
-    cX = int((M["m10"] / M["m00"]))
-    cY = int((M["m01"] / M["m00"]))
-    shape = is_valid_triangle(c)
+    if is_valid_triangle(c):
+        M = cv2.moments(c)
+        cX = int((M["m10"] / M["m00"]))
+        cY = int((M["m01"] / M["m00"]))
+        triangles.append((i, cX, cY))
+        i += 1
 
-    cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
-    cv2.circle(image, (cX, cY), 7, (255, 255, 255), -1)
+        cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
+        cv2.circle(image, (cX, cY), 7, (255, 255, 255), -1)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
