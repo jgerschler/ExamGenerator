@@ -9,7 +9,7 @@ class ShapeDetector:
         # initialize the shape name and approximate the contour
         shape = "unidentified"
         perimeter = cv2.arcLength(c, True)
-        approx = cv2.approxPolyDP(c, 0.04 * perimeter, True)
+        approx = cv2.approxPolyDP(c, 0.1 * perimeter, True)
 
         # if the shape is a triangle, it will have 3 vertices
         if len(approx) == 3:
@@ -75,6 +75,6 @@ for c in cnts:
     cv2.putText(image, shape, (cX, cY), cv2.FONT_HERSHEY_SIMPLEX,
             0.5, (255, 255, 255), 2)
 
-    # show the output image
-    cv2.imshow("Image", image)
-    cv2.waitKey(0)
+# show the output image
+cv2.imshow("Image", image)
+cv2.waitKey(0)
