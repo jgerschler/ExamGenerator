@@ -1,10 +1,10 @@
 import cv2
 import imutils
-import statistics
+import math
 
 def is_valid_triangle(c):
     perimeter = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True) # alter 0.01 as req'd
+    approx = cv2.approxPolyDP(c, 0.01 * perimeter, True) # alter 0.01 as req'd
     return True if len(approx) == 3 else False  
 
 def filter_triangles(t_list):
@@ -56,7 +56,10 @@ for c in cnts:
         cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
         cv2.circle(image, (cX, cY), 7, (255, 255, 255), -1)
 
+markers = filter_triangles(triangles)
+markers.sort(key=lambda x:math.sqrt(x[1]**2 + x[2]**2))
 
+print(markers)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
