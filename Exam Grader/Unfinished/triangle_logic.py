@@ -5,16 +5,26 @@ triangles = [(0, 523, 527, 3196.0), (1, 69, 527, 3196.0),
 def filter_triangles(t_list):
     markers = []
     t_list.sort(key=lambda x: x[3])
+
+    if (t_list[0][3] >= t_list[1][3] * 0.95 and
+        t_list[0][3] <= t_list[1][3] * 1.05):
+
+        markers.append(t_list[0])
     
-    for i in range(len(t_list) - 1):       
-        
-        if (t_list[i + 1][3] >= t_list[i][3] * 0.95 and
-            t_list[i + 1][3] <= t_list[i][3] * 1.05):
+    for i in range(len(t_list) - 2):
+        i += 1
+        if ((t_list[i][3] >= t_list[i - 1][3] * 0.95 and
+            t_list[i][3] <= t_list[i - 1][3] * 1.05) or
+            (t_list[i][3] >= t_list[i + 1][3] * 0.95 and
+            t_list[i][3] <= t_list[i + 1][3] * 1.05)):
 
-            markers.append(t_list[i + 1])
+            markers.append(t_list[i])
 
-    if len(markers) != 4:
-        print("Error: Markers != 4")
-        return markers
+    if (t_list[-1][3] >= t_list[-2][3] * 0.95 and
+        t_list[-1][3] <= t_list[-2][3] * 1.05):
+
+        markers.append(t_list[-1])
 
     return markers
+
+
