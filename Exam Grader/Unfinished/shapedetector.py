@@ -1,9 +1,10 @@
 import cv2
 import imutils
+import statistics
 
 def is_valid_triangle(c):
     perimeter = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True)
+    approx = cv2.approxPolyDP(c, 0.01 * perimeter, True)
     return True if len(approx) == 3 else False  
 
 image = cv2.imread("image.png")
@@ -24,7 +25,7 @@ for c in cnts:
         M = cv2.moments(c)
         cX = int((M["m10"] / M["m00"]))
         cY = int((M["m01"] / M["m00"]))
-        triangles.append((i, cX, cY))
+        triangles.append((i, cX, cY, M["m00"]))
         i += 1
 
         cv2.drawContours(image, [c], -1, (0, 255, 0), 2)
