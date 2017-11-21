@@ -4,7 +4,7 @@ import statistics
 
 def is_valid_triangle(c):
     perimeter = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.01 * perimeter, True)
+    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True) # alter 0.01 as req'd
     return True if len(approx) == 3 else False  
 
 image = cv2.imread("image.png")
