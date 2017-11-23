@@ -61,7 +61,15 @@ for c in cnts:
 markers = filter_triangles(triangles)
 markers.sort(key=lambda x:math.sqrt(x[1]**2 + x[2]**2))
 
-print(markers)
+# test code!
+top_markers = [markers[0], markers[3]]
+x1 = top_markers[0][1]
+y1 = top_markers[0][2]
+x2 = top_markers[1][1]
+y2 = top_markers[1][2]
+
+
+
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
