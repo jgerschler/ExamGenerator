@@ -61,15 +61,39 @@ for c in cnts:
 markers = filter_triangles(triangles)
 markers.sort(key=lambda x:math.sqrt(x[1]**2 + x[2]**2))
 
+print(markers)
+
 # test code!
-top_markers = [markers[0], markers[3]]
+top_markers = [markers[0], markers[2]]
+
+d1 = 0.1200 # marker center to dot center distance factor
+d2 = 0.0530 # lateral dot center to dot center distance factor
+d3 = 0.0849 # row center to row center distance factor
+
 x1 = top_markers[0][1]
 y1 = top_markers[0][2]
 x2 = top_markers[1][1]
 y2 = top_markers[1][2]
+print(x1, y1, x2, y2)
 
+gamma = math.sqrt((y2 - y1)**2 + (x2 - x1)**2)# not needed
 
+#first_row_pnts = [[((1 - d1) * x2 - d1 * x1), y1]]
+first_row_pnts = [[x2 - d1 * (x2 -x1), y2 - d1 * abs(y2 - y1)],
+                  [x2 - (d1 + d2) * (x2 -x1), y2 - (d1 + d2) * abs(y2 - y1)],
+                  [x2 - (d1 + 2 * d2) * (x2 -x1), y2 - (d1 + 2 * d2) * abs(y2 - y1)],
+                  [x2 - (d1 + 3 * d2) * (x2 -x1), y2 - (d1 + 3 * d2) * abs(y2 - y1)],
+                  [x2 - (d1 + 4 * d2 + d3) * (x2 -x1), y2 - (d1 + 4 * d2 + d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 5 * d2 + d3) * (x2 -x1), y2 - (d1 + 5 * d2 + d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 6 * d2 + d3) * (x2 -x1), y2 - (d1 + 6 * d2 + d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 7 * d2 + d3) * (x2 -x1), y2 - (d1 + 7 * d2 + d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 -x1), y2 - (d1 + 8 * d2 + 2 * d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 -x1), y2 - (d1 + 9 * d2 + 2 * d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 -x1), y2 - (d1 + 10 * d2 + 2 * d3) * abs(y2 - y1)],
+                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 -x1), y2 - (d1 + 11 * d2 + 2 * d3) * abs(y2 - y1)]] # horizontal testing only
 
+for entry in first_row_pnts:
+    cv2.circle(image, (int(entry[0]), int(entry[1])), 5, (0, 0, 255), -1)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
