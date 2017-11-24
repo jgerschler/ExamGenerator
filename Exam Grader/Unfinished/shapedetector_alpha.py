@@ -69,60 +69,60 @@ top_markers = [markers[0], markers[2]]
 d1 = 0.1200 # marker center to dot center distance factor
 d2 = 0.0530 # horizontal dot center to dot center distance factor
 d3 = 0.0849 # row center to row center distance factor
-d4 = 0.0540 # vertical dot center to dot center distance factor
+d4 = 0.0530 # vertical dot center to dot center distance factor
 
 x1 = top_markers[0][1]
 y1 = top_markers[0][2]
 x2 = top_markers[1][1]
 y2 = top_markers[1][2]
-print(x1, y1, x2, y2)
 
 gamma = math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 sin_a = (x2 - x1)/gamma
-sin_b = abs(y2 - y1)/gamma
-print (gamma, x2 - x1, y2 - y1, sin_a, sin_b)
+sin_b = (y2 - y1)/gamma
 
 
-row_pnts = [[x2 - d1 * (x2 - x1), y2 - d1 * (y2 - y1)],
-                  [x2 - (d1 + d2) * (x2 - x1), y2 - (d1 + d2) * (y2 - y1)],
-                  [x2 - (d1 + 2 * d2) * (x2 - x1), y2 - (d1 + 2 * d2) * (y2 - y1)],
-                  [x2 - (d1 + 3 * d2) * (x2 - x1), y2 - (d1 + 3 * d2) * (y2 - y1)],
-                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1), y2 - (d1 + 4 * d2 + d3) * (y2 - y1)],
-                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1), y2 - (d1 + 5 * d2 + d3) * (y2 - y1)],
-                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1), y2 - (d1 + 6 * d2 + d3) * (y2 - y1)],
-                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1), y2 - (d1 + 7 * d2 + d3) * (y2 - y1)],
-                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1)],
-                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1)],
-                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1)],
-                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1)],
-                  [x2 - d1 * (x2 - x1) + d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 2 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 3 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 3 * d2) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 4 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 5 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 6 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 7 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-                  [x2 - d1 * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 2 * d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 3 * d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 3 * d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 4 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 5 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 6 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 7 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a]]
+for i in range(10):
+    for j in range(4):
+            cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+            cv2.circle(image, (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+            cv2.circle(image, (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
 
 
-for entry in row_pnts:
-    cv2.circle(image, (int(entry[0]), int(entry[1])), 5, (0, 0, 255), -1)
+    
+
+
+
+
+##row_pnts = [
+##
+##                  [x2 - d1 * (x2 - x1) + d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 2 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 3 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 3 * d2) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 4 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 5 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 6 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 7 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
+##                  [x2 - d1 * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 2 * d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 3 * d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 3 * d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 4 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 5 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 6 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 7 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
+##                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a]]
+
+
+##for entry in row_pnts:
+##    cv2.circle(image, (int(entry[0]), int(entry[1])), 5, (0, 0, 255), -1)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
