@@ -80,34 +80,32 @@ gamma = math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 sin_a = (x2 - x1)/gamma
 sin_b = abs(y2 - y1)/gamma
 
-for i in range(10):
-    for j in range(4):
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1)), int(y2 - (d1 + j * d2) * (y2 - y1))), 5, (0, 0, 255), -1)
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
-        
-for i in range(10):
-    for j in range(4):
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1)), int(y2 - (d1 + j * d2) * (y2 - y1))), 5, (0, 0, 255), -1)
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
 
 for i in range(10):
     for j in range(4):
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1)), int(y2 - (d1 + j * d2) * (y2 - y1))), 5, (0, 0, 255), -1)
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+            cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+            cv2.circle(image, (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+            cv2.circle(image, (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+
+##for i in range(10):
+##    for j in range(4):
+##        cv2.circle(image, (int(x2 - (d1 + j * d2 + d3) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+##        
+##for i in range(10):
+##    for j in range(4):
+##        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
+##
+##for i in range(10):
+##    for j in range(4):
+##        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1)), int(y2 - (d1 + j * d2) * (y2 - y1))), 5, (0, 0, 255), -1)
+##        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) + i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 5, (0, 0, 255), -1)
     
 
 
 
 
 ##row_pnts = [
-##                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1), y2 - (d1 + 4 * d2 + d3) * (y2 - y1)],
-##                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1), y2 - (d1 + 5 * d2 + d3) * (y2 - y1)],
-##                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1), y2 - (d1 + 6 * d2 + d3) * (y2 - y1)],
-##                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1), y2 - (d1 + 7 * d2 + d3) * (y2 - y1)],
-##                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1)],
-##                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1)],
-##                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1)],
-##                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1), y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1)],
+
 ####                  [x2 - d1 * (x2 - x1) + d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + d4 * gamma * sin_a],
 ####                  [x2 - (d1 + d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + d4 * gamma * sin_a],
 ####                  [x2 - (d1 + 2 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + d4 * gamma * sin_a],
