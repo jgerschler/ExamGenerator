@@ -6,7 +6,7 @@ import math
 
 def is_valid_triangle(c):
     perimeter = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True) # alter 0.01 as req'd
+    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True) # alter 0.1 as req'd
     return True if len(approx) == 3 else False  
 
 def filter_triangles(t_list):
@@ -34,11 +34,16 @@ def filter_triangles(t_list):
 
     return markers
 
-image = cv2.imread("image.png")
- 
+image = cv2.imread("tc//tc1.jpg")
+
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-#blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-thresh = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY_INV)[1]
+blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+
+background_thresh = 0.5 * ((int(blurred[10, 10]) + int(blurred[470, 630]) + int(blurred[470, 10]) + int(blurred[10, 630])) / 4)# alter threshold
+
+print(background_thresh)
+
+thresh = cv2.threshold(blurred, background_thresh, 255, cv2.THRESH_BINARY_INV)[1]
  
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
 	cv2.CHAIN_APPROX_SIMPLE)
@@ -62,6 +67,7 @@ markers = filter_triangles(triangles)
 markers.sort(key=lambda x:math.sqrt(x[1]**2 + x[2]**2))
 
 print(markers)
+print("image ", image[50,50])
 
 # test code!
 top_markers = [markers[0], markers[1]]
@@ -90,39 +96,6 @@ for i in range(10):
 
     
 
-
-
-
-##row_pnts = [
-##
-##                  [x2 - d1 * (x2 - x1) + d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 2 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 3 * d2) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 3 * d2) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 4 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 5 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 6 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 7 * d2 + d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1) + d4 * gamma * sin_b, y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1) + d4 * gamma * sin_a],
-##                  [x2 - d1 * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - d1 * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 2 * d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 2 * d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 3 * d2) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 3 * d2) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 4 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 4 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 5 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 5 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 6 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 6 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 7 * d2 + d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 7 * d2 + d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 8 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 8 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 9 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 9 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 10 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 10 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a],
-##                  [x2 - (d1 + 11 * d2 + 2 * d3) * (x2 - x1) + 2 * d4 * gamma * sin_b, y2 - (d1 + 11 * d2 + 2 * d3) * (y2 - y1) + 2 * d4 * gamma * sin_a]]
-
-
-##for entry in row_pnts:
-##    cv2.circle(image, (int(entry[0]), int(entry[1])), 5, (0, 0, 255), -1)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
