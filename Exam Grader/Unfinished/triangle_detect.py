@@ -6,7 +6,7 @@ import math
 
 def is_valid_triangle(c):
     perimeter = cv2.arcLength(c, True)
-    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True) # alter 0.01 as req'd
+    approx = cv2.approxPolyDP(c, 0.1 * perimeter, True) # alter 0.1 as req'd
     return True if len(approx) == 3 else False  
 
 def filter_triangles(t_list):
@@ -34,7 +34,7 @@ def filter_triangles(t_list):
 
     return markers
 
-image = cv2.imread("tc//tc1.jpg")
+image = cv2.imread("tc//tc5.jpg")
  
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (5, 5), 0)
@@ -62,6 +62,7 @@ if len(triangles) > 0:
     markers = filter_triangles(triangles)
     markers.sort(key=lambda x:math.sqrt(x[1]**2 + x[2]**2))
     print(markers)
+    print(triangles)
 else:
     print("no triangles")
     print(triangles)
