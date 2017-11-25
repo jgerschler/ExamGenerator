@@ -93,9 +93,9 @@ sin_b = (y2 - y1)/gamma
 
 for i in range(10):
     for j in range(4):
-            cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
-            cv2.circle(image, (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
-            cv2.circle(image, (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
+        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
+        cv2.circle(image, (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
+        cv2.circle(image, (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
