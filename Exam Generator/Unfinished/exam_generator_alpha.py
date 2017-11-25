@@ -41,11 +41,10 @@ class GenerateExam(object):
                     if self.new_question_list[j][1][k][:3] == '&3#':
                         self.new_question_list[j][1][k] = self.new_question_list[j][1][k][3:]
                         plain_text_answer_string += self.question_dict[k]
-
-            print(plain_text_answer_string)
                         
-            cipher_text = hexlify(simplecrypt.encrypt('ChangeThisKey!', plain_text_answer_string))# encrypt answer string and convert binary to hex before making qr code
-            qr_code = pyqrcode.create(cipher_text, error='M', version=14, mode='binary')# generate QR code
+            cipher_text = hexlify(simplecrypt.encrypt('ChangeThisKey!', plain_text_answer_string))
+            cipher_text = cipher_text.decode('ascii').upper()
+            qr_code = pyqrcode.create(cipher_text, error='M', version=8, mode='alphanumeric')# generate QR code
             qr_code.png('qrcode{0}.png'.format(i), scale=2, module_color=[0, 0, 0, 0], background=[0xff, 0xff, 0xff])# save as PNG  
             pdf=FPDF()
             pdf.alias_nb_pages()
@@ -92,5 +91,5 @@ class GenerateExam(object):
 ##    print("")
 ##    print("Done.")
 
-new_exam = GenerateExam(5, 2)# number of questions, number of versions
+new_exam = GenerateExam(30, 1)# number of questions, number of versions
 new_exam.run()
