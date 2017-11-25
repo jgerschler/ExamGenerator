@@ -45,14 +45,23 @@ def filter_triangles(t_list):
 
     return markers
 
+def is_circle_filled(thresh, gamma, x, y):
+    fill = 0
+    limit = 2 if gamma < 450 else 3
+    for i in range(-limit, limit + 1, 1):
+        for j in range(-limit, limit + 1, 1):
+            fill += thresh[y + i, x + j]# this order is inverted in opencv
+    if (fill / 255) > math.ceil(0.5 * (2 * limit + 1)**2):
+        return True
+    return False
+    
+
 image = cv2.imread("tc//tc1.jpg")
 
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
 background_thresh = 0.8 * ((int(blurred[10, 10]) + int(blurred[470, 630]) + int(blurred[470, 10]) + int(blurred[10, 630])) / 4)# alter threshold
-
-print(background_thresh)
 
 thresh = cv2.threshold(blurred, background_thresh, 255, cv2.THRESH_BINARY_INV)[1]
  
@@ -91,11 +100,27 @@ gamma = math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 sin_a = (x2 - x1)/gamma
 sin_b = (y2 - y1)/gamma
 
+
 for i in range(10):
     for j in range(4):
-        cv2.circle(image, (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
-        cv2.circle(image, (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
-        cv2.circle(image, (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)), 3, (0, 0, 255), -1)
+        x, y = int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)
+        if is_circle_filled(thresh, gamma, x, y):
+            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+        else:
+            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
+        x, y = int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)
+        if is_circle_filled(thresh, gamma, x, y):
+            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+        else:
+            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
+        x, y = int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)
+        if is_circle_filled(thresh, gamma, x, y):
+            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+        else:
+            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
+
+
+
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
