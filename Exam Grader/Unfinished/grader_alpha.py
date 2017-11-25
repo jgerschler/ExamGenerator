@@ -100,27 +100,32 @@ gamma = math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 sin_a = (x2 - x1)/gamma
 sin_b = (y2 - y1)/gamma
 
+response_list = []
+
+number_key = {0:"D", 1:"C", 2:"B", 3:"A"}# adjust scanning method as desired
 
 for i in range(10):
     for j in range(4):
         x, y = int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a)
         if is_circle_filled(thresh, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            response_list.append(str(i + 1) + number_key[j])
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a)
         if is_circle_filled(thresh, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            response_list.append(str(i + 11) + number_key[j])
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b), int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a)
         if is_circle_filled(thresh, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            response_list.append(str(i + 21) + number_key[j])
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
-
-
-
+            
+print(response_list)
 
 cv2.imshow("Image", image)
 cv2.waitKey(0)
