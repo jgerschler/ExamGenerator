@@ -1,6 +1,7 @@
 import cv2
 import imutils
 import math
+import os
 import subprocess
 from binascii import unhexlify
 from simplecrypt import decrypt
@@ -64,7 +65,7 @@ def is_circle_filled(gray, gamma, x, y):
     limit = 2 if gamma < 450 else 3
     for i in range(-limit, limit + 1, 1):
         for j in range(-limit, limit + 1, 1):
-            if gray[y + i, x + j] < 100:# this order (y, x) is inverted in opencv
+            if gray[y + i, x + j] < 120:# this order (y, x) is inverted in opencv
                 fill += 1
     if fill > math.ceil(0.5 * (2 * limit + 1)**2):
         return True
@@ -134,24 +135,33 @@ for i in range(10):
         x, y = (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
-            cv2.circle(gray, (x, y), 3, (0, 255, 255), -1)
-            response_dict[i + 1] = number_key[j]
+            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            if i + 1 not in response_dict.keys():
+                response_dict[i + 1] = number_key[j]
+            else:
+                response_dict[i + 1] = "(MULTIPLE SELECTIONS)"
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
-            cv2.circle(gray, (x, y), 3, (0, 255, 255), -1)
-            response_dict[i + 11] = number_key[j]
+            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            if i + 1 not in response_dict.keys():
+                response_dict[i + 11] = number_key[j]
+            else:
+                response_dict[i + 11] = "(MULTIPLE SELECTIONS)"
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
-            cv2.circle(gray, (x, y), 3, (0, 255, 255), -1)
-            response_dict[i + 21] = number_key[j]
+            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            if i + 1 not in response_dict.keys():
+                response_dict[i + 21] = number_key[j]
+            else:
+                response_dict[i + 21] = "(MULTIPLE SELECTIONS)"
         else:
-            cv2.circle(gray, (x, y), 3, (0, 0, 255), -1)
+            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
             
 for i in range(len(answer_string)):# fix this algorithm in case of multiple answers!
     if i + 1 in response_dict.keys():
@@ -170,6 +180,7 @@ for entry in incorrect:
     print("NO. {0}: CORRECT ANSWER: {1} || YOUR ANSWER: {2}\r\n".format(entry[0],
                                                                     entry[1],
                                                                     entry[2]))
+os.remove('image.png')
 
-cv2.imshow("Image", gray)
+cv2.imshow("Image", image)
 cv2.waitKey(0)
