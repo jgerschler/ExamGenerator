@@ -7,10 +7,10 @@ from simplecrypt import decrypt
 
 dirpath = "C:\\ZBar\\bin\\zbarcam.exe"
 
-d1 = 0.1250 # marker center to dot center distance factor
-d2 = 0.0525 # horizontal dot center to dot center distance factor
+d1 = 0.1016 # marker center to dot center distance factor
+d2 = 0.0545 # horizontal dot center to dot center distance factor
 d3 = 0.0879 # row center to row center distance factor
-d4 = 0.0524 # vertical dot center to dot center distance factor
+d4 = 0.0554 # vertical dot center to dot center distance factor
 
 response_dict = {}
 incorrect = []
@@ -59,13 +59,14 @@ def filter_triangles(t_list):
 
     return markers
 
-def is_circle_filled(thresh, gamma, x, y):
+def is_circle_filled(gray, gamma, x, y):
     fill = 0
     limit = 2 if gamma < 450 else 3
     for i in range(-limit, limit + 1, 1):
         for j in range(-limit, limit + 1, 1):
-            fill += thresh[y + i, x + j]# this order is inverted in opencv
-    if (fill / 255) > math.ceil(0.5 * (2 * limit + 1)**2):
+            if gray[y + i, x + j] < 100:# this order (y, x) is inverted in opencv
+                fill += 1
+    if fill > math.ceil(0.5 * (2 * limit + 1)**2):
         return True
     return False
 
@@ -134,21 +135,21 @@ for i in range(10):
     for j in range(4):
         x, y = (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a))
-        if is_circle_filled(thresh, gamma, x, y):
+        if is_circle_filled(gray, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
             response_dict[i + 1] = number_key[j]
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a))
-        if is_circle_filled(thresh, gamma, x, y):
+        if is_circle_filled(gray, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
             response_dict[i + 11] = number_key[j]
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a))
-        if is_circle_filled(thresh, gamma, x, y):
+        if is_circle_filled(gray, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
             response_dict[i + 21] = number_key[j]
         else:
@@ -172,5 +173,5 @@ for entry in incorrect:
                                                                     entry[1],
                                                                     entry[2]))
 
-cv2.imshow("Image", thresh)
+cv2.imshow("Image", image)
 cv2.waitKey(0)
