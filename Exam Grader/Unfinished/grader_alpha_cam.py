@@ -5,7 +5,7 @@ import subprocess
 from binascii import unhexlify
 from simplecrypt import decrypt
 
-dirpath = "C:\\ZBar\\bin\\zbarcam.exe"
+dirpath = "C:\\ZBar\\bin\\zbarimg.exe image.png"
 
 d1 = 0.1016 # marker center to dot center distance factor
 d2 = 0.0545 # horizontal dot center to dot center distance factor
@@ -71,10 +71,7 @@ def is_circle_filled(gray, gamma, x, y):
     return False
 
 def zbar_reader(dirpath):
-    print("Expose barcode to camera")
-    raw_code = ''
-    while raw_code == '':
-        raw_code = subprocess.check_output(dirpath, shell=True)
+    raw_code = subprocess.check_output(dirpath, shell=True)
     raw_code = raw_code.split()[0][8:]
     return decrypt('ChangeThisKey!', unhexlify(raw_code))
 
@@ -90,6 +87,9 @@ while True:
         cv2.destroyAllWindows()
         print("Image Saved!")
         break
+
+answer_string = zbar_reader(dirpath).decode('ascii').upper()
+print(answer_string)
 
 image = cv2.imread("image.png")
 
@@ -128,32 +128,30 @@ gamma = math.sqrt((y2 - y1)**2 + (x2 - x1)**2)
 sin_a = (x2 - x1)/gamma
 sin_b = (y2 - y1)/gamma
 
-##answer_string = zbar_reader(dirpath)
-answer_string = 'AAAACBDCABDCCCCCBDCAABCDABCDAB'
 
 for i in range(10):
     for j in range(4):
         x, y = (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
-            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            cv2.circle(gray, (x, y), 3, (0, 255, 255), -1)
             response_dict[i + 1] = number_key[j]
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = (int(x2 - (d1 + (j + 4) * d2 + d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
-            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            cv2.circle(gray, (x, y), 3, (0, 255, 255), -1)
             response_dict[i + 11] = number_key[j]
         else:
             cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
         x, y = (int(x2 - (d1 + j * d2) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
-            cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
+            cv2.circle(gray, (x, y), 3, (0, 255, 255), -1)
             response_dict[i + 21] = number_key[j]
         else:
-            cv2.circle(image, (x, y), 3, (0, 0, 255), -1)
+            cv2.circle(gray, (x, y), 3, (0, 0, 255), -1)
             
 for i in range(len(answer_string)):# fix this algorithm in case of multiple answers!
     if i + 1 in response_dict.keys():
@@ -173,5 +171,5 @@ for entry in incorrect:
                                                                     entry[1],
                                                                     entry[2]))
 
-cv2.imshow("Image", image)
+cv2.imshow("Image", gray)
 cv2.waitKey(0)
