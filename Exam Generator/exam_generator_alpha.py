@@ -95,5 +95,5 @@ class GenerateExam(object):
 ##    print("")
 ##    print("Done.")
 
-new_exam = GenerateExam(10, 2)# number of questions, number of versions
+new_exam = GenerateExam(30, 4)# number of questions, number of versions
 new_exam.run()
