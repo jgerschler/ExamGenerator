@@ -6,7 +6,7 @@ import subprocess
 from binascii import unhexlify
 from simplecrypt import decrypt
 
-dirpath = "C:\\ZBar\\bin\\zbarimg.exe image.png"
+dirpath = "C:\\ZBar\\bin\\zbarcam.exe"
 
 d1 = 0.1016 # marker center to dot center distance factor
 d2 = 0.0545 # horizontal dot center to dot center distance factor
@@ -72,7 +72,9 @@ def is_circle_filled(gray, gamma, x, y):
     return False
 
 def zbar_reader(dirpath):
-    raw_code = subprocess.check_output(dirpath, shell=True)
+    raw_code = ''
+    while raw_code == '':
+        raw_code = subprocess.check_output(dirpath, shell=True)
     raw_code = raw_code.split()[0][8:]
     return decrypt('ChangeThisKey!', unhexlify(raw_code))
 
@@ -133,7 +135,6 @@ sin_b = (y2 - y1)/gamma
 
 for i in range(10):
     for j in range(4):
-        print(i, j)
         x, y = (int(x2 - (d1 + (j + 8) * d2 + 2 * d3) * (x2 - x1) - i * d4 * gamma * sin_b),
                 int(y2 - (d1 + (j + 8) * d2 + 2 * d3) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
@@ -148,7 +149,7 @@ for i in range(10):
                 int(y2 - (d1 + (j + 4) * d2 + d3) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
-            if i + 1 not in response_dict.keys():
+            if i + 11 not in response_dict.keys():
                 response_dict[i + 11] = number_key[j]
             else:
                 response_dict[i + 11] = "(MULTIPLE SELECTIONS)"
@@ -158,7 +159,7 @@ for i in range(10):
                 int(y2 - (d1 + j * d2) * (y2 - y1) + i * d4 * gamma * sin_a))
         if is_circle_filled(gray, gamma, x, y):
             cv2.circle(image, (x, y), 3, (0, 255, 255), -1)
-            if i + 1 not in response_dict.keys():
+            if i + 21 not in response_dict.keys():
                 response_dict[i + 21] = number_key[j]
             else:
                 response_dict[i + 21] = "(MULTIPLE SELECTIONS)"
@@ -182,9 +183,6 @@ for entry in incorrect:
     print("NO. {0}: CORRECT ANSWER: {1} || YOUR ANSWER: {2}\r\n".format(entry[0],
                                                                     entry[1],
                                                                     entry[2]))
-
-print(response_dict)
-print(response_dict.keys())
 
 os.remove('image.png')
 

@@ -72,7 +72,9 @@ def is_circle_filled(gray, gamma, x, y):
     return False
 
 def zbar_reader(dirpath):
-    raw_code = subprocess.check_output(dirpath, shell=True)
+    raw_code = ''
+    while raw_code == '':
+        raw_code = subprocess.check_output(dirpath, shell=True)
     raw_code = raw_code.split()[0][8:]
     return decrypt('ChangeThisKey!', unhexlify(raw_code))
 
